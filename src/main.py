@@ -1,7 +1,7 @@
 import argparse
 
-from common.nasa_file_processing import merge_data
-from common.utils import split_train_test_data
+from data_processing.nasa_file_processing import merge_data
+from data_processing.utils import split_train_test_data
 from app.train import train_rnn_model
 
 
