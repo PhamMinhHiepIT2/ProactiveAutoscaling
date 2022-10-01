@@ -1,5 +1,19 @@
+from datetime import datetime
 import numpy as np
 from sklearn.model_selection import train_test_split
+
+
+def datetime_format(datetime_str: str):
+    """
+    Format datetime in string format to correct format
+    Expect format: 
+        yyyy-MM-dd HH:mm:SS
+
+    Args:
+        datetime_str (str): datetime in string format which get from data file (ex: 01/Aug/1995:00:00:07)
+    """
+    date_formatted = datetime.strptime(datetime_str, "%d/%b/%Y:%H:%M:%S")
+    return date_formatted
 
 
 def convert_series_to_list(series_data):

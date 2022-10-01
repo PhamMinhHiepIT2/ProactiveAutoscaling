@@ -1,7 +1,7 @@
 import re
 import pandas as pd
 
-from common.time_processing import datetime_format
+from data_processing.utils import datetime_format
 
 
 def line_format(line: str):
