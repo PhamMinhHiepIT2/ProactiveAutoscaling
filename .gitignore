@@ -1,5 +1,5 @@
 .DS_Store
-*/__pycache__
+**/__pycache__
 data/*
 data_link
 download_data.py
