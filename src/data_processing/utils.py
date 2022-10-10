@@ -38,6 +38,8 @@ def split_train_test_data(series_data):
     """
     df_list = convert_series_to_list(series_data)
     x_batch, y_batch = get_data(df_list)
-    X_train, y_train, X_test, y_test = train_test_split(
+    X_train, X_test, y_train, y_test = train_test_split(
         x_batch, y_batch, test_size=0.3)
+    print("Xtrain shape: {}, y_train shape {}".format(
+        X_train.shape, y_train.shape))
     return X_train, y_train, X_test, y_test

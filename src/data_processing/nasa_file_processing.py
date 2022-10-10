@@ -39,11 +39,18 @@ def get_dataframe(data_file: str):
     data_formatted = []
     with open(data_file, mode="r", encoding="utf8", errors='ignore') as file:
         data = file.readlines()
+        print("Formatting file {}".format(data_file))
         for line in data:
-            line_formatted = line_format(line)
-            data_formatted.append(line_formatted)
+            try:
+                line_formatted = line_format(line)
+                data_formatted.append(line_formatted)
+            except Exception as e:
+                print("Line error: {}".format(line))
+                print("Error cause: {}".format(e))
+
     df = pd.DataFrame(data_formatted, columns=[
                       "client_url", "date_time", "timezone", "request", "status_code", "payload_length"])
+    print("Complete formatting file {}".format(data_file))
     return df
 
 
@@ -54,8 +61,10 @@ def aggregate_data(data_file: str):
     Args:
         data_file (str): path to data file
     """
+    print("Aggregating data of file {}".format(data_file))
     df = get_dataframe(data_file)
     df_aggregate = df.resample('1min', on='date_time').client_url.count()
+    print("Complete aggregate data of file {}".format(data_file))
     return df_aggregate
 
 
@@ -75,8 +84,10 @@ def merge_data(files: list):
     if len(files) < 1:
         print("There is no data file")
         raise Exception("No input data file")
+    print("Merged file {}".format(files[0]))
     df = aggregate_data(files[0])
     for file in files:
         data = aggregate_data(file)
         pd.concat([df, data], axis=0)
+        print("Merged file {}".format(file))
     return df

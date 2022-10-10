@@ -24,12 +24,18 @@ def add_arguments():
 
 if __name__ == "__main__":
     args = add_arguments()
-    data_files = ["/Users/hieppm/hieppm/HUST/20221/DATN/data/NASA_access_log_Aug95",
-                  "/Users/hieppm/hieppm/HUST/20221/DATN/data/NASA_access_log_Jul95"]
+    data_files = [
+        "/home/hieppm/bdi/personal/ProactiveAutoscaling/data/NASA_access_log_Jul95",
+        "/home/hieppm/bdi/personal/ProactiveAutoscaling/data/NASA_access_log_Aug95"]
+    model_dir = "/home/hieppm/bdi/personal/ProactiveAutoscaling/trained-models"
     data = merge_data(data_files)
+    print("==============DATA HEAD===================")
+    print(data.head())
     X_train, y_train, X_test, y_test = split_train_test_data(series_data=data)
+    print("==============X test=================")
+    print(X_test[0])
     train_rnn_model(
         X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test,
         hidden_size=args.hidden_size, num_layers=args.num_layers,
-        learning_rate=args.lr, learner=args.learner, mode=args.mode, output_keep_prob=args.output_keep_prob
+        learning_rate=args.lr, learner=args.learner, output_keep_prob=args.output_keep_prob, epochs=args.num_epochs, model_dir=model_dir
     )
