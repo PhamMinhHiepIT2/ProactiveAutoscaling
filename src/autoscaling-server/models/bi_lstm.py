@@ -1,11 +1,10 @@
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Bidirectional, Flatten
-from keras.callbacks import EarlyStopping
 
 
 class BiLSTM:
     def __init__(self):
-        self.callback = EarlyStopping(monitor='loss', patience=5)
+        pass
 
     def build(self, units, input_shape, num_classes=1):
         """
