@@ -1,0 +1,3 @@
+HOST = '10.124.69.3'
+PORT = 30920
+ES_INDEX_PATTERN = "logstash"
