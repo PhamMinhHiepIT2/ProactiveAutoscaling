@@ -1,28 +1,28 @@
-name: SonarCloud analysis
+# name: SonarCloud analysis
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+#   workflow_dispatch:
 
-permissions:
-  pull-requests: read
+# permissions:
+#   pull-requests: read
 
-jobs:
-  Analysis:
-    runs-on: ubuntu-latest
+# jobs:
+#   Analysis:
+#     runs-on: ubuntu-latest
     
-    steps:
-      - name: Analyze with SonarCloud         
-        uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
-        env:
-          GITHUB_TOKEN: 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
-          SONAR_TOKEN: 3e3271ff812d58da451493856788ab8219f802c1   
-        with:
-          args:             
-            -Dsonar.projectKey=PhamMinhHiepIT2_ProactiveAutoscaling
-            -Dsonar.organization=phamminhhiepit2
-            -Dsonar.branch.base=main
+#     steps:
+#       - name: Analyze with SonarCloud         
+#         uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
+#         env:
+#           GITHUB_TOKEN: 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
+#           SONAR_TOKEN: 3e3271ff812d58da451493856788ab8219f802c1   
+#         with:
+#           args:             
+#             -Dsonar.projectKey=PhamMinhHiepIT2_ProactiveAutoscaling
+#             -Dsonar.organization=phamminhhiepit2
+#             -Dsonar.branch.base=main
           
