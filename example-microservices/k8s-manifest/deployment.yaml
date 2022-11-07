@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-deployment
+  labels:
+    app: booking-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booking-app
+  template:
+    metadata:
+      labels:
+        app: booking-app
+    spec:
+      containers:
+        - name: booking-app
+          image: booking-app:latest
+          ports:
+            - containerPort: 5003
+          resources:
+            requests:
+              cpu: 125m
+              memory: 250Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies-deployment
+  labels:
+    app: movies-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: movies-app
+  template:
+    metadata:
+      labels:
+        app: movies-app
+    spec:
+      containers:
+        - name: movies-app
+          image: movies-app:latest
+          ports:
+            - containerPort: 5001
+          resources:
+            requests:
+              cpu: 125m
+              memory: 250Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: showtimes-deployment
+  labels:
+    app: showtimes-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: showtimes-app
+  template:
+    metadata:
+      labels:
+        app: showtimes-app
+    spec:
+      containers:
+        - name: showtimes-app
+          image: showtimes-app:latest
+          ports:
+            - containerPort: 5002
+          resources:
+            requests:
+              cpu: 125m
+              memory: 250Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+  labels:
+    app: user-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-app
+  template:
+    metadata:
+      labels:
+        app: user-app
+    spec:
+      containers:
+        - name: user-app
+          image: user-app:latest
+          ports:
+            - containerPort: 5004
+          resources:
+            requests:
+              cpu: 125m
+              memory: 250Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
