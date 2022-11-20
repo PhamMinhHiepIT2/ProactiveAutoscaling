@@ -4,3 +4,4 @@ data/*
 data_link
 download_data.py
 trained-models/*
+**/cpu/*
