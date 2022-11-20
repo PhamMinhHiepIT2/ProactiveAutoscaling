@@ -3,8 +3,6 @@ version: '3'
 services:
   serve:
     image: tensorflow-serve:latest
-    volumes:
-      - /home/hieppm/bdi/personal/ProactiveAutoscaling/trained-models/cpu:/model/scaler
     ports:
-      - 8501
-    
+      - "8501:8501"
+      - "8500:8500"
