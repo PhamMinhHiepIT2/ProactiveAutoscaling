@@ -2,10 +2,10 @@ import os
 import datetime
 
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Bidirectional, Flatten
+from keras.layers import Dense, LSTM, GRU, Flatten
 
 
-class BiLSTM:
+class GRUModel:
     def __init__(self):
         pass
 
@@ -23,8 +23,8 @@ class BiLSTM:
         """
 
         model = Sequential()
-        model.add(Bidirectional(LSTM(units, activation='relu',
-                  return_sequences=True), input_shape=input_shape, merge_mode='concat'))
+        model.add(GRU(units, activation='relu',
+                  return_sequences=False, input_shape=input_shape))
         model.add(Flatten())
         model.add(Dense(16, activation='relu'))
         model.add(Dense(num_classes))

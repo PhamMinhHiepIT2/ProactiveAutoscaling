@@ -123,29 +123,29 @@ def read_log(path):
     return pd.DataFrame(fields)
 
 
-if __name__ == "__main__":
-    # if len(sys.argv) < 2:
-    #     sys.stderr.write("USAGE: %s log.gz...")
+def fifa_aggregate_data(data_folder: str, interval='1min', load_percent=1):
+    """
+    Aggregate number requests per minute
 
-    data_folder = "/Users/hieppm/hieppm/HUST/20221/DATN/data"
+    Args:
+        data_folder (DataFrame): folder path that contains data
+    """
     list_files = os.listdir(data_folder)
 
-    logs = []
+    zip_files = []
     for file in list_files:
-
         if file.endswith('.gz'):
-            file_path = os.path.join(data_folder, file)
-            new_file = file[:-2] + "csv"
+            zip_files.append(file)
 
-            df = read_log(file_path)
-            # here you could prefilter!
-            # df = df[df["type"].isin(["HTML", "DYNAMIC"]) & (df.region == "Paris") & (df.server == 4)]
-            df.sort_values("timestamp", inplace=True)
-            logs.append(df)
+    zip_files.sort()
 
-    df = pd.concat(logs)
-    df.to_csv(os.path.join(data_folder, 'fifa.csv'), columns=[
-              'timestamp', 'client_id', 'object_id', 'size', 'method', 'status', 'type', 'server'])
-    print("your data is stored in df. Have FUN!")
-    # import pdb
-    # pdb.set_trace()
+    num_zip_file = len(zip_files)
+    logs = []
+    for i in range(round(num_zip_file * load_percent // 100)):
+        file_path = os.path.join(data_folder, zip_files[i])
+        print(file_path)
+        df_log = read_log(file_path)
+        logs.append(df_log)
+    df_logs = pd.concat(logs)
+    df_aggregate = df_logs.resample(interval, on='timestamp').client_id.count()
+    return df_aggregate

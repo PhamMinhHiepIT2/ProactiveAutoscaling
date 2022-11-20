@@ -1,5 +1,9 @@
 FROM tensorflow/serving:latest
 
+WORKDIR /model
+
+ADD  cpu/ ./scaler
+
 EXPOSE 8500
 EXPOSE 8501
 

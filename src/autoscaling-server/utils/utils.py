@@ -133,7 +133,7 @@ def remove_noise_data(x, y, multisteps=1):
     if len(x) != len(y):
         raise Exception('X and Y must be same length!!!!')
     for i in noise_indexes:
-        if i > len(x):
+        if i >= len(x):
             continue
         x = np.delete(x, i, 0)
         y = np.delete(y, i, 0)
