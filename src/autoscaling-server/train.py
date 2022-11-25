@@ -60,7 +60,7 @@ def start_training(args):
         df = merge_nasa_data()
     elif dataset == 'fifa':
         df = fifa_aggregate_data(data_folder=DATA_DIR,
-                                 interval='1min', load_percent=100)
+                                 interval='3min', load_percent=100)
     else:
         raise TypeError("Invalid dataset!!!")
 

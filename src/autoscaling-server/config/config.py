@@ -1,4 +1,4 @@
-DIFF_REQUEST = 1000
+DIFF_REQUEST = 2000
 AUG_NASA_DATA_FILE = "../../data/NASA_access_log_Aug95"
 JULY_NASA_DATA_FILE = "../../data/NASA_access_log_Jul95"
 DATA_DIR = "../../data/fifa"
