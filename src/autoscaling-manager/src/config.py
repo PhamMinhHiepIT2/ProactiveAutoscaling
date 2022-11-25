@@ -1,40 +1,44 @@
 HOST = '10.124.69.3'
 PORT = 30920
-ES_INDEX_PATTERN = "logstash"
+ES_INDEX_PATTERN = "autoscaler"
 
 AUTO_SCALER_HOST = ""
 AUTO_SCALER_PORT = ""
 
-KUBECONFIG_FILE = "kubeconfig"
-DEPLOYMENT_NAME = "deployment"
+KUBECONFIG_FILE = "/home/hieppm/.kube/local_config_1"
+DEPLOYMENT_NAME = "content-platform-backend"
 K8S_NAMESPACE = "chatbot"
+
+POD_MAX_REQUEST = 300
+MIN_POD = 1
+MAX_POD = 5
 
 LAST_MINUTE_DATA_QUERY = {
     "query": {
         "bool": {
             "must": {
                 "regexp": {
-                    "log": {
-                        "value": ".*v1.*"
+                    "api_prefix": {
+                        "value": ".*internal_api.*"
                     }
                 }
             },
             "filter": {
                 "range": {
                     "time": {
-                        "gte": "2022-10-04T05:07:04.976915837Z",
-                        "lte": "2022-10-10T06:07:04.976915837Z"
+                        "gte": "now-5m",
+                        "lte": "now"
                     }
                 }
             }
         }
     },
-    "size": 0,
+    "size": 1,
     "aggs": {
         "group_by_time": {
             "date_histogram": {
                 "field": "time",
-                "interval": "day"
+                "interval": "minute"
             }
         }
     }
