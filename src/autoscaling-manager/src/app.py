@@ -6,12 +6,12 @@ from collections import deque
 from elasticsearch import Elasticsearch
 
 
-from config import HOST, PORT, LAST_MINUTE_DATA_QUERY, POD_MAX_REQUEST
+from config import ES_HOST, ES_PORT, LAST_MINUTE_DATA_QUERY, POD_MAX_REQUEST
 from serve import grpc_infer
 from k8s_controller import scale_deployment
 
 
-es_url = "http://{}:{}".format(HOST, PORT)
+es_url = "http://{}:{}".format(ES_HOST, ES_PORT)
 es = Elasticsearch(hosts=es_url)
 print("Connected to ElasticSearch")
 

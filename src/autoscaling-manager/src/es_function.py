@@ -4,10 +4,10 @@ from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 
 
-from config import HOST, PORT, ES_INDEX_PATTERN
+from config import ES_HOST, ES_PORT, ES_INDEX_PATTERN
 
 
-es_url = "http://{}:{}".format(HOST, PORT)
+es_url = "http://{}:{}".format(ES_HOST, ES_PORT)
 es = Elasticsearch(hosts=es_url)
 
 
