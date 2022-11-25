@@ -20,6 +20,7 @@ spec:
         - name: autoscaler-manager
           image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221125
           ports: []
+          imagePullPolicy: Always
           volumeMounts:
             - name: kubeconfig
               mountPath: "/tmp"
