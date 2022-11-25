@@ -3,7 +3,13 @@ import tensorflow as tf
 from tensorflow_serving.apis import predict_pb2
 from tensorflow_serving.apis import prediction_service_pb2_grpc
 
-channel = grpc.insecure_channel("scaler-service.monitoring:8500")
+
+from config import AUTO_SCALER_HOST, AUTO_SCALER_PORT
+
+scaler_endpoint = f"{AUTO_SCALER_HOST}:{AUTO_SCALER_PORT}"
+
+
+channel = grpc.insecure_channel(scaler_endpoint)
 stub = prediction_service_pb2_grpc.PredictionServiceStub(channel=channel)
 
 request = predict_pb2.PredictRequest()
@@ -25,5 +31,5 @@ def grpc_infer(input: list):
         print("Predicted next request: {}".format(pred_request[0]))
         return pred_request[0]
     except Exception as e:
-        print(e)
+        print("Infer error!!! \nReason: {}\n\n".format(e))
         return 0
