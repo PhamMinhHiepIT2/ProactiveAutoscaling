@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoscaler-manager
+  labels:
+    app: autoscaler-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autoscaler-manager
+  template:
+    metadata:
+      labels:
+        app: autoscaler-manager
+    spec:
+      imagePullSecrets:
+        - name: harbor-creds
+      containers:
+        - name: autoscaler-manager
+          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221125
+          ports: []
+          volumeMounts:
+            - name: kubeconfig
+              mountPath: "/tmp"
+          env:
+            - name: ES_HOST
+              value: elasticsearch-master
+            - name: ES_PORT
+              value: "9200"
+            - name: "AUTO_SCALER_HOST"
+              value: "scaler-service"
+            - name: "AUTO_SCALER_PORT"
+              value: "8500"
+            - name: "DEPLOYMENT_NAME"
+              value: "content-platform-backend"
+            - name: "K8S_NAMESPACE"
+              value: "chatbot"
+      volumes:
+        - name: kubeconfig
+          secret: 
+            secretName: local-config
