@@ -17,6 +17,14 @@ POD_MAX_REQUEST = os.getenv("POD_MAX_REQUEST", 300)
 MIN_POD = os.getenv("MIN_POD", 1)
 MAX_POD = os.getenv("MAX_POD", 5)
 
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "127.0.0.1")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "15433")
+POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
+POSTGRES_PASSWD = os.getenv("POSTGRES_PASSWD", "admin")
+POSTGRES_DB = os.getenv("POSTGRES_DB", "scaler")
+
+INSERT_QUERY = """INSERT INTO PREDICTED (REQUEST, REPLICAS) VALUES (%s,%s)"""
+
 LAST_MINUTE_DATA_QUERY = {
     "query": {
         "bool": {
