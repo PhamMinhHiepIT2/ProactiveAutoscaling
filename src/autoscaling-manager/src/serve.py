@@ -22,10 +22,11 @@ request.model_spec.signature_name = "serving_default"
 def grpc_infer(input: list):
     expanded_input = [[0]]
     expanded_input[0][0] = input
+    print("[x] Input: {}".format(expanded_input))
     try:
         request.inputs['bidirectional_input'].CopyFrom(
             tf.make_tensor_proto(expanded_input))
-        result = stub.Predict(request, 10.0)
+        result = stub.Predict(request, 10.0)  # 10s for timeout
         result = result.outputs
         pred_request = result['dense_1'].float_val
         print("Predicted next request: {}".format(pred_request[0]))

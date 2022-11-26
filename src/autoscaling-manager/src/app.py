@@ -36,17 +36,17 @@ while True:
     if result:
         data = result["aggregations"]["group_by_time"]["buckets"]
         if len(data) > 0:
-            last_min_request = data[-1]["doc_count"]
+            last_min_request = float(data[-1]["doc_count"])
         else:
-            last_min_request = 0
+            last_min_request = 0.0
         if len(last_10min_requests) < 10:
             last_10min_requests.append(last_min_request)
         else:
             last_10min_requests.popleft()
             last_10min_requests.append(last_min_request)
             pred_request = grpc_infer(list(last_10min_requests))
-            replicas = round(pred_request // POD_MAX_REQUEST)
+            replicas = abs(round(pred_request // POD_MAX_REQUEST))
             print("Predicted request: {} | Scale to replicas = {}".format(
                 pred_request, replicas))
         print("Last 10min data: {}".format(last_10min_requests))
-    time.sleep(60)
+    time.sleep(1)
