@@ -18,7 +18,7 @@ spec:
         - name: harbor-creds
       containers:
         - name: autoscaler-manager
-          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221125
+          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221127
           ports: []
           imagePullPolicy: Always
           volumeMounts:
@@ -37,6 +37,18 @@ spec:
               value: "content-platform-backend"
             - name: "K8S_NAMESPACE"
               value: "chatbot"
+            - name: "KUBECONFIG_FILE"
+              value: "/tmp/kubeconfig"
+            - name: POSTGRES_HOST
+              value: "postgresql"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWD
+              value: "admin"
+            - name: POSTGRES_DB
+              value: "scaler"
       volumes:
         - name: kubeconfig
           secret: 
