@@ -1,5 +1,7 @@
 import os
 
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+
 ES_HOST = os.getenv('ES_HOST', '10.124.69.3')
 ES_PORT = os.getenv('ES_PORT', '30920')
 ES_INDEX_PATTERN = os.getenv("ES_INDEX_PATTERN", "autoscaler")
@@ -18,7 +20,7 @@ MIN_POD = os.getenv("MIN_POD", 1)
 MAX_POD = os.getenv("MAX_POD", 5)
 
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "127.0.0.1")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT", "15433")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "15435")
 POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
 POSTGRES_PASSWD = os.getenv("POSTGRES_PASSWD", "admin")
 POSTGRES_DB = os.getenv("POSTGRES_DB", "scaler")

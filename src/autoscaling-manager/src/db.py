@@ -1,8 +1,10 @@
 import psycopg2
-import datetime
-
+import logging
 
 from config import POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWD, POSTGRES_PORT, POSTGRES_USER
+
+
+logger = logging.getLogger()
 
 
 class DBConnector(object):
@@ -21,7 +23,7 @@ class DBConnector(object):
             host=self.host,
             port=self.port
         )
-        print("Create connection successfully!!!")
+        logger.info("Create connection successfully!!!")
         return conn
 
     # For explicitly opening database connection
@@ -82,7 +84,7 @@ class DBConnection(DBConnector):
         PREDICTED_REQUEST           INT    NOT NULL,
         REPLICAS            INT     NOT NULL,
         SCALED_TIME        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);''')
-        print("Table created successfully")
+        logger.info("Table created successfully")
         connection.commit()
         cursor.close()
 
@@ -131,7 +133,7 @@ if __name__ == "__main__":
     db_obj = DBConnection(host=POSTGRES_HOST, port=POSTGRES_PORT,
                           user=POSTGRES_USER, passwd=POSTGRES_PASSWD, db=POSTGRES_DB)
     # db_obj.drop_table("predicted")
-    db_obj.create_table()
+    # db_obj.create_table()
     # record_insert = (5, 5)
     # db_obj.insert_one(insert_query, record_insert)
-    # db_obj.get_all(table_name="predicted")
+    db_obj.get_all(table_name="predicted")
