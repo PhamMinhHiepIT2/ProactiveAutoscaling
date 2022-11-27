@@ -78,7 +78,8 @@ class DBConnection(DBConnector):
             cursor = connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS PREDICTED
         (ID SERIAL PRIMARY KEY     NOT NULL,
-        REQUEST           INT    NOT NULL,
+        LAST_REQUEST    INT NOT NULL,
+        PREDICTED_REQUEST           INT    NOT NULL,
         REPLICAS            INT     NOT NULL,
         SCALED_TIME        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);''')
         print("Table created successfully")

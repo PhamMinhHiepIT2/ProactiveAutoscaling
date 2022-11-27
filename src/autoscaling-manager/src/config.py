@@ -13,7 +13,7 @@ KUBECONFIG_FILE = os.getenv(
 DEPLOYMENT_NAME = os.getenv("DEPLOYMENT_NAME", "content-platform-backend")
 K8S_NAMESPACE = os.getenv("K8S_NAMESPACE", "chatbot")
 
-POD_MAX_REQUEST = os.getenv("POD_MAX_REQUEST", 300)
+POD_MAX_REQUEST = os.getenv("POD_MAX_REQUEST", 6000)
 MIN_POD = os.getenv("MIN_POD", 1)
 MAX_POD = os.getenv("MAX_POD", 5)
 
@@ -23,14 +23,14 @@ POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
 POSTGRES_PASSWD = os.getenv("POSTGRES_PASSWD", "admin")
 POSTGRES_DB = os.getenv("POSTGRES_DB", "scaler")
 
-INSERT_QUERY = """INSERT INTO PREDICTED (REQUEST, REPLICAS) VALUES (%s,%s)"""
+INSERT_QUERY = """INSERT INTO PREDICTED (LAST_REQUEST, PREDICTED_REQUEST, REPLICAS) VALUES (%s,%s)"""
 
 LAST_MINUTE_DATA_QUERY = {
     "query": {
         "bool": {
             "must": {
                 "regexp": {
-                    "api_prefix": {
+                    "api_prefix.keyword": {
                         "value": ".*internal_api.*"
                     }
                 }
@@ -38,7 +38,7 @@ LAST_MINUTE_DATA_QUERY = {
             "filter": {
                 "range": {
                     "time": {
-                        "gte": "now-5m",
+                        "gte": "now-3m",
                         "lte": "now"
                     }
                 }
