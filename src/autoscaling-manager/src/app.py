@@ -39,6 +39,7 @@ postgres.create_table()
 last_10min_requests = deque()
 save_predicted_req = 0
 save_replicas = 0
+expected_replicas = 0
 flag = 0
 
 while True:
@@ -79,9 +80,16 @@ while True:
             record_db = (save_predicted_req,
                          int(last_min_request),
                          save_replicas,
+                         expected_replicas,
                          POD_MAX_REQUEST)
             save_replicas = replicas
             save_predicted_req = pred_request
+            expected_replicas = abs(
+                math.ceil(int(last_min_request) / POD_MAX_REQUEST))
+            if expected_replicas < MIN_POD:
+                expected_replicas = MIN_POD
+            elif expected_replicas > MAX_POD:
+                expected_replicas = MAX_POD
             # skip to add first row
             if flag == 0:
                 logger.info("Skipping to add first row!!!")
@@ -92,4 +100,4 @@ while True:
             postgres.insert_one(INSERT_QUERY, record_db)
             scale_deployment(replicas=replicas)
         logger.info("Last 10min data: {}".format(last_10min_requests))
-    time.sleep(60)
+    time.sleep(1)
