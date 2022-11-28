@@ -5,3 +5,8 @@ data_link
 download_data.py
 trained-models/*
 **/cpu/*
+src/autoscaleing-manager/trained-models/*
+src/trained-models/*
+.dccache
+128-16-64-20221120T021333Z-001.zip
+data-20221115T011454Z-001.zip
