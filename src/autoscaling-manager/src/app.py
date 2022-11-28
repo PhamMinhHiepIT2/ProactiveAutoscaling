@@ -9,7 +9,11 @@ from collections import deque
 from elasticsearch import Elasticsearch
 
 
-from config import LOG_LEVEL, ES_HOST, ES_PORT, LAST_MINUTE_DATA_QUERY, POD_MAX_REQUEST, INSERT_QUERY, POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWD, POSTGRES_PORT, POSTGRES_USER
+from config import (
+    LOG_LEVEL, ES_HOST, ES_PORT, LAST_MINUTE_DATA_QUERY,
+    POD_MAX_REQUEST, INSERT_QUERY, POSTGRES_DB, POSTGRES_HOST,
+    POSTGRES_PASSWD, POSTGRES_PORT, POSTGRES_USER, MAX_POD, MIN_POD
+)
 from serve import grpc_infer
 from k8s_controller import scale_deployment
 from db import DBConnection
@@ -68,6 +72,10 @@ while True:
             if pred_request < 0:
                 pred_request = 0
             replicas = abs(math.ceil(pred_request // POD_MAX_REQUEST))
+            if replicas < MIN_POD:
+                replicas = MIN_POD
+            elif replicas > MAX_POD:
+                replicas = MAX_POD
             record_db = (save_predicted_req,
                          int(last_min_request),
                          save_replicas,
