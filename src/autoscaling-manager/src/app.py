@@ -22,7 +22,7 @@ logger.addHandler(console_handler)
 
 logger.info("Initializing connection to Elasticsearch ...")
 es_url = "http://{}:{}".format(ES_HOST, ES_PORT)
-es = Elasticsearch(hosts=es_url)
+es = Elasticsearch(hosts=[es_url])
 logger.info("Connected to ElasticSearch")
 
 logger.info("Initializing connection to Postgresql ...")
@@ -71,4 +71,4 @@ while True:
             postgres.insert_one(INSERT_QUERY, record_db)
             scale_deployment(replicas=replicas)
         logger.info("Last 10min data: {}".format(last_10min_requests))
-    time.sleep(60)
+    time.sleep(1)

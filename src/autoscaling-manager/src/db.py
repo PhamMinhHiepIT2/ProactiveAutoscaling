@@ -128,12 +128,12 @@ class DBConnection(DBConnector):
         return result
 
 
-if __name__ == "__main__":
-    insert_query = """INSERT INTO PREDICTED (REQUEST, REPLICAS) VALUES (%s,%s)"""
-    db_obj = DBConnection(host=POSTGRES_HOST, port=POSTGRES_PORT,
-                          user=POSTGRES_USER, passwd=POSTGRES_PASSWD, db=POSTGRES_DB)
-    # db_obj.drop_table("predicted")
+# if __name__ == "__main__":
+#     insert_query = """INSERT INTO PREDICTED (REQUEST, REPLICAS) VALUES (%s,%s)"""
+#     db_obj = DBConnection(host=POSTGRES_HOST, port=POSTGRES_PORT,
+#                           user=POSTGRES_USER, passwd=POSTGRES_PASSWD, db=POSTGRES_DB)
+#     db_obj.drop_table("predicted")
     # db_obj.create_table()
     # record_insert = (5, 5)
     # db_obj.insert_one(insert_query, record_insert)
-    db_obj.get_all(table_name="predicted")
+    # db_obj.get_all(table_name="predicted")
