@@ -71,7 +71,7 @@ while True:
             pred_request = grpc_infer(list(last_10min_requests))
             if pred_request < 0:
                 pred_request = 0
-            replicas = abs(math.ceil(pred_request // POD_MAX_REQUEST))
+            replicas = abs(math.ceil(pred_request / POD_MAX_REQUEST))
             if replicas < MIN_POD:
                 replicas = MIN_POD
             elif replicas > MAX_POD:
