@@ -100,4 +100,4 @@ while True:
             postgres.insert_one(INSERT_QUERY, record_db)
             scale_deployment(replicas=replicas)
         logger.info("Last 10min data: {}".format(last_10min_requests))
-    time.sleep(1)
+    time.sleep(60)
