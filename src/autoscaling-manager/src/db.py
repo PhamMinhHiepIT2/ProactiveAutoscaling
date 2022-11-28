@@ -83,6 +83,7 @@ class DBConnection(DBConnector):
         PREDICTED_REQUEST    INT NOT NULL,
         ACTUAL_REQUEST           INT    NOT NULL,
         REPLICAS            INT     NOT NULL,
+        EXPECTED_REPLICAS   INT     NOT NULL,
         POD_BASE_REQUEST    INT     NOT NULL,
         SCALED_TIME        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);''')
         logger.info("Table created successfully")
