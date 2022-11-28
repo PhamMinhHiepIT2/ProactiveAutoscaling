@@ -22,7 +22,7 @@ logger.addHandler(console_handler)
 
 logger.info("Initializing connection to Elasticsearch ...")
 es_url = "http://{}:{}".format(ES_HOST, ES_PORT)
-es = Elasticsearch(hosts=[es_url])
+es = Elasticsearch(hosts=[es_url], request_timeout=600)
 logger.info("Connected to ElasticSearch")
 
 logger.info("Initializing connection to Postgresql ...")
@@ -33,6 +33,9 @@ logger.info("Connected to Postgresql")
 postgres.create_table()
 
 last_10min_requests = deque()
+save_predicted_req = 0
+save_replicas = 0
+flag = 0
 
 while True:
     result = None
@@ -65,7 +68,17 @@ while True:
             if pred_request < 0:
                 pred_request = 0
             replicas = abs(math.ceil(pred_request // POD_MAX_REQUEST))
-            record_db = (int(last_min_request), pred_request, replicas)
+            record_db = (save_predicted_req,
+                         int(last_min_request),
+                         save_replicas,
+                         POD_MAX_REQUEST)
+            save_replicas = replicas
+            save_predicted_req = pred_request
+            # skip to add first row
+            if flag == 0:
+                logger.info("Skipping to add first row!!!")
+                flag += 1
+                continue
             logger.info("Predicted request: {} | Scale to replicas = {}".format(
                 pred_request, replicas))
             postgres.insert_one(INSERT_QUERY, record_db)

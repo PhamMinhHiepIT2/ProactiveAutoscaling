@@ -80,9 +80,10 @@ class DBConnection(DBConnector):
             cursor = connection.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS PREDICTED
         (ID SERIAL PRIMARY KEY     NOT NULL,
-        LAST_REQUEST    INT NOT NULL,
-        PREDICTED_REQUEST           INT    NOT NULL,
+        PREDICTED_REQUEST    INT NOT NULL,
+        ACTUAL_REQUEST           INT    NOT NULL,
         REPLICAS            INT     NOT NULL,
+        POD_BASE_REQUEST    INT     NOT NULL,
         SCALED_TIME        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);''')
         logger.info("Table created successfully")
         connection.commit()
