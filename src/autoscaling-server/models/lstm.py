@@ -3,6 +3,7 @@ import datetime
 
 from keras.models import Sequential
 from keras.layers import Dense, LSTM, Flatten
+from utils.utils import custom_mape_loss, custom_mape_loss_multistep
 
 
 class LSTMModel:
@@ -30,7 +31,7 @@ class LSTMModel:
         model.add(Dense(num_classes))
         return model
 
-    def train(self, model, X_train, y_train, X_test, y_test, epochs, batch_size, callbacks):
+    def train(self, model, X_train, y_train, X_test, y_test, epochs, batch_size, callbacks, multistep=False):
         """
         Training BiLSTM model
 
@@ -44,7 +45,12 @@ class LSTMModel:
             batch_size: batch size for input when training
             callbacks: callbacks function to avoid overfitting or underfitting
         """
-        model.compile(loss='mae', optimizer='adam', metrics=['mse', 'mape'])
+        if multistep:
+            model.compile(loss='mae', optimizer='adam',
+                          metrics=['mse', custom_mape_loss_multistep])
+        else:
+            model.compile(loss='mae', optimizer='adam',
+                          metrics=['mse', custom_mape_loss])
         history = model.fit(X_train, y_train,
                             batch_size=batch_size,
                             epochs=epochs,

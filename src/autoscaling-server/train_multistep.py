@@ -7,10 +7,10 @@ from sklearn.model_selection import train_test_split
 from keras.callbacks import EarlyStopping
 
 
-from utils.utils import get_data, remove_noise_data
+from utils.utils import remove_noise_data, get_data_multistep
 from data_processing.nasa_file_processing import aggregate_data
 from data_processing.fifa_file_processing import fifa_aggregate_data
-from config.config import AUG_NASA_DATA_FILE, JULY_NASA_DATA_FILE, BILSTM_SAVE_MODEL_DIR, LSTM_SAVE_MODEL_DIR, GRU_SAVE_MODEL_DIR, STACK_LSTM_SAVE_MODEL_DIR, DATA_DIR
+from config.config import AUG_NASA_DATA_FILE, JULY_NASA_DATA_FILE, BILSTM_SAVE_MULTISTEP_MODEL_DIR, LSTM_SAVE_MULTISTEP_MODEL_DIR, GRU_SAVE_MULTISTEP_MODEL_DIR, STACK_LSTM_SAVE_MULTISTEP_MODEL_DIR, DATA_DIR
 from models.bi_lstm import BiLSTM
 from models.lstm import LSTMModel
 from models.gru import GRUModel
@@ -34,13 +34,14 @@ def process_train_test_data(df, test_size=0.25):
         df_list = df['client_id'].tolist()
     else:
         df_list = df.to_list()
-    x_batch, y_batch = get_data(df_list)
+    # get data with multistep
+    x_batch, y_batch = get_data_multistep(df_list)
     X_train, X_test, y_train, y_test = train_test_split(
         x_batch, y_batch, test_size=test_size)
 
     # remove noise data
-    X_train, y_train = remove_noise_data(X_train, y_train)
-    X_test, y_test = remove_noise_data(X_test, y_test)
+    X_train, y_train = remove_noise_data(X_train, y_train, multisteps=5)
+    X_test, y_test = remove_noise_data(X_test, y_test, multisteps=5)
 
     # expand dims for train and test data
     # normalize the dataset
@@ -85,23 +86,23 @@ def start_training(args):
     callback = EarlyStopping(monitor='val_loss', patience=patience)
     if model_type == "bilstm":
         model = BiLSTM()
-        model_dir = BILSTM_SAVE_MODEL_DIR
+        model_dir = BILSTM_SAVE_MULTISTEP_MODEL_DIR
     elif model_type == "lstm":
         model = LSTMModel()
-        model_dir = LSTM_SAVE_MODEL_DIR
+        model_dir = LSTM_SAVE_MULTISTEP_MODEL_DIR
     elif model_type == "gru":
         model = GRUModel()
-        model_dir = GRU_SAVE_MODEL_DIR
+        model_dir = GRU_SAVE_MULTISTEP_MODEL_DIR
     elif model_type == "stacklstm":
         model = StackLSTM()
-        model_dir = STACK_LSTM_SAVE_MODEL_DIR
+        model_dir = STACK_LSTM_SAVE_MULTISTEP_MODEL_DIR
     else:
         raise TypeError("Invalid model type!!!")
 
     built_model = model.build(
-        units=units, input_shape=(1, 10), num_classes=1)
+        units=units, input_shape=(1, 10), num_classes=5)
     model.train(built_model, X_train, y_train, X_test,
-                y_test, epochs=epochs, batch_size=batch_size, callbacks=[callback, ])
+                y_test, epochs=epochs, batch_size=batch_size, callbacks=[callback, ], multistep=True)
     model.save_model(built_model, model_dir=model_dir)
 
 

@@ -123,6 +123,10 @@ def read_log(path):
     return pd.DataFrame(fields)
 
 
+def resample(df, interval='1min', on='timestamp'):
+    return df.resample(interval, on=on).client_id.count()
+
+
 def fifa_aggregate_data(data_folder: str, interval='1min', load_percent=1):
     """
     Aggregate number requests per minute
@@ -131,6 +135,8 @@ def fifa_aggregate_data(data_folder: str, interval='1min', load_percent=1):
         data_folder (DataFrame): folder path that contains data
     """
     list_files = os.listdir(data_folder)
+
+    BATCH = 5
 
     zip_files = []
     for file in list_files:
@@ -141,11 +147,31 @@ def fifa_aggregate_data(data_folder: str, interval='1min', load_percent=1):
 
     num_zip_file = len(zip_files)
     logs = []
-    for i in range(round(num_zip_file * load_percent // 100)):
+    count = 0
+    df_batch = []
+    df_logs = None
+
+    for i in range(num_zip_file):
         file_path = os.path.join(data_folder, zip_files[i])
-        print(file_path)
         df_log = read_log(file_path)
+        print(file_path)
         logs.append(df_log)
-    df_logs = pd.concat(logs)
-    df_aggregate = df_logs.resample(interval, on='timestamp').client_id.count()
-    return df_aggregate
+        count += 1
+        if count == BATCH:
+            df_logs = pd.concat(logs)
+            df = resample(df_logs)
+            df_batch.append(df)
+            count = 0
+            logs = []
+
+    df = resample(df_logs)
+
+    df_batch.append(df)
+
+    df_fifa = pd.concat([df_batch[0], df_batch[1]], axis=0)
+    for i in range(2, len(df_batch)):
+        df_fifa = pd.concat([df_fifa, df_batch[i]], axis=0)
+    df_fifa = pd.DataFrame(df_fifa)
+    df_fifa.to_csv(os.path.join(data_folder, "fifa.csv"),
+                   sep='\t', columns=['client_id'], index=False)
+    return df_fifa
