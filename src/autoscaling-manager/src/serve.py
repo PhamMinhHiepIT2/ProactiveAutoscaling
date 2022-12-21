@@ -4,7 +4,7 @@ from tensorflow_serving.apis import predict_pb2
 from tensorflow_serving.apis import prediction_service_pb2_grpc
 
 
-from config import AUTO_SCALER_HOST, AUTO_SCALER_PORT
+from config import AUTO_SCALER_HOST, AUTO_SCALER_PORT, MODEL_TYPE
 
 scaler_endpoint = f"{AUTO_SCALER_HOST}:{AUTO_SCALER_PORT}"
 
@@ -24,7 +24,15 @@ def grpc_infer(input: list):
     expanded_input[0][0] = input
     print("[x] Input: {}".format(expanded_input))
     try:
-        request.inputs['bidirectional_input'].CopyFrom(
+        if MODEL_TYPE == 'bilstm':
+            input_type = 'bidirectional_input'
+        elif MODEL_TYPE == 'gru':
+            input_type = 'gru_input'
+        elif MODEL_TYPE == 'lstm':
+            input_type = 'lstm_input'
+        else:
+            raise Exception('>>>>>>>> MODEL TYPE is invalid!!!')
+        request.inputs[input_type].CopyFrom(
             tf.make_tensor_proto(expanded_input))
         result = stub.Predict(request, 10.0)  # 10s for timeout
         result = result.outputs
