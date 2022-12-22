@@ -15,9 +15,9 @@ KUBECONFIG_FILE = os.getenv(
 DEPLOYMENT_NAME = os.getenv("DEPLOYMENT_NAME", "content-platform-backend")
 K8S_NAMESPACE = os.getenv("K8S_NAMESPACE", "chatbot")
 
-POD_MAX_REQUEST = os.getenv("POD_MAX_REQUEST", 6000)
-MIN_POD = os.getenv("MIN_POD", 1)
-MAX_POD = os.getenv("MAX_POD", 5)
+POD_MAX_REQUEST = int(os.getenv("POD_MAX_REQUEST", 6000))
+MIN_POD = int(os.getenv("MIN_POD", 1))
+MAX_POD = int(os.getenv("MAX_POD", 5))
 
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "127.0.0.1")
 POSTGRES_PORT = os.getenv("POSTGRES_PORT", "15433")
