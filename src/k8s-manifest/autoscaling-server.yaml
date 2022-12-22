@@ -19,7 +19,7 @@ spec:
       
       containers:
         - name: scaler
-          image: 10.124.69.3:30444/toolchains/tensorflow-serving:20221125-bilstm-input-10
+          image: 10.124.69.3:30444/toolchains/tensorflow-serving:20221222-gru-10
           # pullPolicy: IfNotPresent
           ports:
             - containerPort: 8500

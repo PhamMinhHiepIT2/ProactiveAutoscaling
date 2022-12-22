@@ -18,7 +18,7 @@ spec:
         - name: harbor-creds
       containers:
         - name: autoscaler-manager
-          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221128
+          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221222
           ports: []
           imagePullPolicy: Always
           volumeMounts:
@@ -40,15 +40,19 @@ spec:
             - name: "KUBECONFIG_FILE"
               value: "/tmp/kubeconfig"
             - name: POSTGRES_HOST
-              value: "postgresql"
+              value: "10.124.69.166"
             - name: POSTGRES_PORT
               value: "5432"
             - name: POSTGRES_USER
-              value: "postgres"
+              value: "bdiadmin"
             - name: POSTGRES_PASSWD
-              value: "admin"
+              value: "vinbdi@2022@#"
             - name: POSTGRES_DB
               value: "scaler"
+            - name: MODEL_TYPE
+              value: "gru"
+            - name: POD_MAX_REQUEST
+              value: "300"
       volumes:
         - name: kubeconfig
           secret: 
