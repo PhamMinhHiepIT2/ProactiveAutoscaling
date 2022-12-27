@@ -32,6 +32,9 @@ ADD gru/ ./scaler
 FROM base as stage-lstm
 ADD lstm/ ./scaler
 
+FROM base as stage-bilstm_multistep
+ADD bilstm-multistep/ ./scaler
+
 FROM stage-$MODEL_TYPE
 COPY entrypoint.sh .
 ENTRYPOINT [ "/bin/bash", "entrypoint.sh" ]

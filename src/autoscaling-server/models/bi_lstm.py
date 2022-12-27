@@ -51,7 +51,7 @@ class BiLSTM:
                           metrics=['mse', custom_mape_loss_multistep])
         else:
             model.compile(loss='mae', optimizer='adam',
-                          metrics=['mse', custom_mape_loss])
+                          metrics=['mse', custom_mape_loss, 'mape'])
         history = model.fit(X_train, y_train,
                             batch_size=batch_size,
                             epochs=epochs,

@@ -71,21 +71,21 @@ class DBConnection(DBConnector):
         return result
 
     @classmethod
-    def create_table(cls):
+    def create_table(cls, table_name):
         connection = cls.get_connection()
         try:
             cursor = connection.cursor()
         except Exception as e:
             connection = cls.get_connection(new=True)  # Create new connection
             cursor = connection.cursor()
-        cursor.execute('''CREATE TABLE IF NOT EXISTS PREDICTED
+        cursor.execute('''CREATE TABLE IF NOT EXISTS %s
         (ID SERIAL PRIMARY KEY     NOT NULL,
         PREDICTED_REQUEST    INT NOT NULL,
         ACTUAL_REQUEST           INT    NOT NULL,
-        REPLICAS            INT     NOT NULL,
-        EXPECTED_REPLICAS   INT     NOT NULL,
+        PREDICTED_REPLICAS            INT     NOT NULL,
+        ACTUAL_REPLICAS   INT     NOT NULL,
         POD_BASE_REQUEST    INT     NOT NULL,
-        SCALED_TIME        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);''')
+        SCALED_TIME        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);''' % table_name)
         logger.info("Table created successfully")
         connection.commit()
         cursor.close()
@@ -130,11 +130,11 @@ class DBConnection(DBConnector):
         return result
 
 
-# if __name__ == "__main__":
-#     insert_query = """INSERT INTO PREDICTED (REQUEST, REPLICAS) VALUES (%s,%s)"""
-#     db_obj = DBConnection(host=POSTGRES_HOST, port=POSTGRES_PORT,
-#                           user=POSTGRES_USER, passwd=POSTGRES_PASSWD, db=POSTGRES_DB)
-#     db_obj.drop_table("predicted")
+if __name__ == "__main__":
+    # insert_query = """INSERT INTO PREDICTED (REQUEST, REPLICAS) VALUES (%s,%s)"""
+    db_obj = DBConnection(host=POSTGRES_HOST, port=POSTGRES_PORT,
+                          user=POSTGRES_USER, passwd=POSTGRES_PASSWD, db=POSTGRES_DB)
+    db_obj.drop_table("predicted")
     # db_obj.create_table()
     # record_insert = (5, 5)
     # db_obj.insert_one(insert_query, record_insert)

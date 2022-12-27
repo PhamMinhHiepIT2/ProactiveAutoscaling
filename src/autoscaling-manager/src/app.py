@@ -12,9 +12,9 @@ from elasticsearch import Elasticsearch
 from config import (
     LOG_LEVEL, ES_HOST, ES_PORT, LAST_MINUTE_DATA_QUERY,
     POD_MAX_REQUEST, INSERT_QUERY, POSTGRES_DB, POSTGRES_HOST,
-    POSTGRES_PASSWD, POSTGRES_PORT, POSTGRES_USER, MAX_POD, MIN_POD
+    POSTGRES_PASSWD, POSTGRES_PORT, POSTGRES_USER, MAX_POD, MIN_POD, MULTISTEP, MODEL_TYPE
 )
-from serve import grpc_infer
+from serve import grpc_infer, grpc_infer_multistep
 from k8s_controller import scale_deployment
 from db import DBConnection
 
@@ -34,7 +34,14 @@ logger.info("Initializing connection to Postgresql ...")
 postgres = DBConnection(host=POSTGRES_HOST, port=POSTGRES_PORT,
                         user=POSTGRES_USER, passwd=POSTGRES_PASSWD, db=POSTGRES_DB)
 logger.info("Connected to Postgresql")
-postgres.create_table()
+table_name = "predict"
+if MULTISTEP:
+    table_name = f"{table_name}_{MODEL_TYPE}_multistep"
+else:
+    table_name = f"{table_name}_{MODEL_TYPE}"
+
+# create postgres table
+postgres.create_table(table_name=table_name)
 
 last_10min_requests = deque()
 save_predicted_req = 0
@@ -69,7 +76,11 @@ while True:
         else:
             last_10min_requests.popleft()
             last_10min_requests.append(last_min_request)
-            pred_request = grpc_infer(list(last_10min_requests))
+            pred_request = 0
+            if MULTISTEP:
+                pred_request = grpc_infer_multistep(list(last_10min_requests))
+            else:
+                pred_request = grpc_infer(list(last_10min_requests))
             if pred_request < 0:
                 pred_request = 0
             replicas = abs(math.ceil(pred_request / POD_MAX_REQUEST))

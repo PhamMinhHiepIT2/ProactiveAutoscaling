@@ -37,11 +37,11 @@ database:
   type: postgres
   # encryptionKey: << YOUR ENCRYPTION KEY >>
   ## Only need when you use mysql / postgres
-  host: postgresql
+  host: 10.124.69.166
   port: 5432
   dbname: metabase
-  username: postgres
-  password: admin
+  username: bdiadmin
+  password: vinbdi@2022@#
   ## Alternatively, use a connection URI for full configurability. Example for SSL enabled Postgres.
   # connectionURI: postgres://user:password@host:port/database?ssl=true&sslmode=require&sslfactory=org.postgresql.ssl.NonValidatingFactory"
   ## If a secret with the database credentials already exists, use the following values:

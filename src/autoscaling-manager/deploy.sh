@@ -9,7 +9,9 @@ IMAGE_URL=10.124.69.3:30444/toolchains/autoscaler-manager:$IMAGE_TAG
 docker build -t autoscaler-manager .
 docker tag autoscaler-manager:latest $IMAGE_URL
 
-yq eval ".spec.template.spec.containers[0].image=$IMAGE_URL" -i $AUTOSCALE_MANAGER_MANIFEST
+yq eval ".spec.template.spec.containers[0].image=\"$IMAGE_URL\"" -i $AUTOSCALE_MANAGER_MANIFEST
+
+cat $AUTOSCALE_MANAGER_MANIFEST
 
 export KUBECONFIG=~/.kube/local_config_1
 

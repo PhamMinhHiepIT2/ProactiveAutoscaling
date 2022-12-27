@@ -18,7 +18,7 @@ spec:
         - name: harbor-creds
       containers:
         - name: autoscaler-manager
-          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221222
+          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221227
           ports: []
           imagePullPolicy: Always
           volumeMounts:
@@ -52,8 +52,14 @@ spec:
             - name: MODEL_TYPE
               value: "gru"
             - name: POD_MAX_REQUEST
-              value: "300"
+              value: "6000"
+            - name: MULTISTEP
+              value: ""
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
       volumes:
         - name: kubeconfig
-          secret: 
+          secret:
             secretName: local-config
