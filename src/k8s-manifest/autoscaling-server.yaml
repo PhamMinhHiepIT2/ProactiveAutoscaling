@@ -18,7 +18,7 @@ spec:
         - name: harbor-creds
       containers:
         - name: scaler
-          image: 10.124.69.3:30444/toolchains/tensorflow-serving:20221227-gru
+          image: 10.124.69.3:30444/toolchains/tensorflow-serving:20221229-bilstm_multistep
           imagePullPolicy: Always
           ports:
             - containerPort: 8500

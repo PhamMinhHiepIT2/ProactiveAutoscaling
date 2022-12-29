@@ -68,7 +68,7 @@ def grpc_infer_multistep(input: list):
         for i in range(n, 0, -1):
             s += pred_request[n-i] * i
 
-        pred_response = s // sum([range(1, n + 1)])
+        pred_response = s // sum(range(1, n + 1))
         return pred_response
     except Exception as e:
         print("Infer error!!! \nReason: {}\n\n".format(e))

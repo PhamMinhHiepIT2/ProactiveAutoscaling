@@ -18,7 +18,7 @@ spec:
         - name: harbor-creds
       containers:
         - name: autoscaler-manager
-          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221227
+          image: 10.124.69.3:30444/toolchains/autoscaler-manager:20221229-1672300977
           ports: []
           imagePullPolicy: Always
           volumeMounts:
@@ -50,11 +50,11 @@ spec:
             - name: POSTGRES_DB
               value: "scaler"
             - name: MODEL_TYPE
-              value: "gru"
+              value: "bilstm"
             - name: POD_MAX_REQUEST
-              value: "6000"
+              value: "3000"
             - name: MULTISTEP
-              value: ""
+              value: "true"
           resources:
             limits:
               cpu: 1000m

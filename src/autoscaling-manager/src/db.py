@@ -86,7 +86,7 @@ class DBConnection(DBConnector):
         ACTUAL_REPLICAS   INT     NOT NULL,
         POD_BASE_REQUEST    INT     NOT NULL,
         SCALED_TIME        TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL);''' % table_name)
-        logger.info("Table created successfully")
+        logger.info(f"Table {table_name} created successfully")
         connection.commit()
         cursor.close()
 

@@ -11,7 +11,7 @@ from elasticsearch import Elasticsearch
 
 from config import (
     LOG_LEVEL, ES_HOST, ES_PORT, LAST_MINUTE_DATA_QUERY,
-    POD_MAX_REQUEST, INSERT_QUERY, POSTGRES_DB, POSTGRES_HOST,
+    POD_MAX_REQUEST, POSTGRES_DB, POSTGRES_HOST,
     POSTGRES_PASSWD, POSTGRES_PORT, POSTGRES_USER, MAX_POD, MIN_POD, MULTISTEP, MODEL_TYPE
 )
 from serve import grpc_infer, grpc_infer_multistep
@@ -42,6 +42,21 @@ else:
 
 # create postgres table
 postgres.create_table(table_name=table_name)
+
+# INSERT_QUERY = """INSERT INTO %s (PREDICTED_REQUEST, ACTUAL_REQUEST, PREDICTED_REPLICAS, ACTUAL_REPLICAS, POD_BASE_REQUEST) VALUES (%s,%s,%s,%s,%s)"""
+
+
+BILSTM_QUERY = """INSERT INTO predict_bilstm (PREDICTED_REQUEST, ACTUAL_REQUEST, PREDICTED_REPLICAS, ACTUAL_REPLICAS, POD_BASE_REQUEST) VALUES (%s,%s,%s,%s,%s)"""
+GRU_QUERY = """INSERT INTO predict_gru (PREDICTED_REQUEST, ACTUAL_REQUEST, PREDICTED_REPLICAS, ACTUAL_REPLICAS, POD_BASE_REQUEST) VALUES (%s,%s,%s,%s,%s)"""
+LSTM_QUERY = """INSERT INTO predict_lstm (PREDICTED_REQUEST, ACTUAL_REQUEST, PREDICTED_REPLICAS, ACTUAL_REPLICAS, POD_BASE_REQUEST) VALUES (%s,%s,%s,%s,%s)"""
+BILSTM_MULTISTEP_QUERY = """INSERT INTO predict_bilstm_multistep (PREDICTED_REQUEST, ACTUAL_REQUEST, PREDICTED_REPLICAS, ACTUAL_REPLICAS, POD_BASE_REQUEST) VALUES (%s,%s,%s,%s,%s)"""
+
+INSERT_QUERY = {
+    "bilstm": BILSTM_QUERY,
+    "gru": GRU_QUERY,
+    "lstm": LSTM_QUERY,
+    "bilstm_multistep": BILSTM_MULTISTEP_QUERY
+}
 
 last_10min_requests = deque()
 save_predicted_req = 0
@@ -108,7 +123,7 @@ while True:
                 continue
             logger.info("Predicted request: {} | Scale to replicas = {}".format(
                 pred_request, replicas))
-            postgres.insert_one(INSERT_QUERY, record_db)
+            postgres.insert_one(INSERT_QUERY[MODEL_TYPE], record_db)
             scale_deployment(replicas=replicas)
         logger.info("Last 10min data: {}".format(last_10min_requests))
     time.sleep(60)
